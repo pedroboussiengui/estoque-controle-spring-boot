@@ -3,6 +3,8 @@ package org.estoque.estoque.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.sql.Timestamp;
+
 @Entity
 @Table(name = "products_table")
 @AllArgsConstructor
@@ -21,4 +23,10 @@ public class Product {
     private Double price;
 
     private Integer quantity;
+
+    private Timestamp createdAt;
+
+    private Timestamp updatedAt;
+
+    private Timestamp deletedAt;
 }
