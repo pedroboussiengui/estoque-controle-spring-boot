@@ -1,6 +1,6 @@
 package org.estoque.estoque.services;
 
-import org.estoque.estoque.dto.ProductDTO;
+import org.estoque.estoque.dto.ProductRequestDTO;
 import org.estoque.estoque.exception.ProductNotFoundException;
 import org.estoque.estoque.models.Product;
 import org.estoque.estoque.repositories.ProductRepository;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.ZonedDateTime;
-import java.util.List;
 
 @Service
 public class ProductService {
@@ -42,7 +41,7 @@ public class ProductService {
         repository.delete(product);
     }
 
-    public Product update(Long id, ProductDTO productDTO) {
+    public Product update(Long id, ProductRequestDTO productDTO) {
         Product product = find(id);
         product.setName(productDTO.getName());
         product.setPrice(productDTO.getPrice());

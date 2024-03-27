@@ -1,6 +1,6 @@
 package org.estoque.estoque;
 
-import org.estoque.estoque.dto.ProductDTO;
+import org.estoque.estoque.dto.ProductRequestDTO;
 import org.estoque.estoque.models.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ class EstoqueApplicationTests {
 
     @Test
     void whenMapProductDto_thenConvertToEntity() {
-        ProductDTO productDTO = new ProductDTO();
+        ProductRequestDTO productDTO = new ProductRequestDTO();
         productDTO.setName("Samsung S24");
         productDTO.setPrice(5000.0);
         productDTO.setQuantity(50);

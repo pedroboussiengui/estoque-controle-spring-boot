@@ -1,17 +1,16 @@
 package org.estoque.estoque.controllers;
 
 import jakarta.validation.Valid;
-import org.estoque.estoque.dto.ProductDTO;
+import org.estoque.estoque.dto.ProductRequestDTO;
 import org.estoque.estoque.models.Product;
 import org.estoque.estoque.services.ProductService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
-import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +27,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product register(@RequestBody @Valid ProductDTO productDTO) {
+    public Product register(@RequestBody @Valid ProductRequestDTO productDTO) {
         Product productEntity = this.mapper.map(productDTO, Product.class);
         return service.add(productEntity);
     }
@@ -46,11 +45,12 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public Product update(@PathVariable Long id, @RequestBody @Valid ProductDTO productDTO) {
+    public Product update(@PathVariable Long id, @RequestBody @Valid ProductRequestDTO productDTO) {
         return service.update(id, productDTO);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('USER')")
     public Product findById(@PathVariable Long id) {
         return service.find(id);
     }

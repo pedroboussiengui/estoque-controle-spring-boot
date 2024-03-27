@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: basic
   datasource:
     url: jdbc:postgresql://localhost:5433/estoque_db
     username: postgres

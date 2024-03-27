@@ -1,6 +1,6 @@
 package org.estoque.estoque.controllers;
 
-import org.estoque.estoque.dto.TokenDTOOutput;
+import org.estoque.estoque.dto.TokenResponseDTO;
 import org.estoque.estoque.services.JwtService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,9 +18,9 @@ public class AuthController {
     }
 
     @GetMapping
-    public ResponseEntity<TokenDTOOutput> generate() {
+    public ResponseEntity<TokenResponseDTO> generate() {
         String token = service.generate();
-        TokenDTOOutput tokenDTOOutput = TokenDTOOutput.builder()
+        TokenResponseDTO tokenDTOOutput = TokenResponseDTO.builder()
                 .token(token)
                 .build();
         System.out.println(tokenDTOOutput);

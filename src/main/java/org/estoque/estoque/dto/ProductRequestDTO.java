@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ProductDTO {
+public class ProductRequestDTO {
     @NotEmpty(message = "The product name can't be empty.")
     private String name;
 
