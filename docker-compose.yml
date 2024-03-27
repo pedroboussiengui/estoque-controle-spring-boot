@@ -1,0 +1,11 @@
+version: '3.9'
+
+services:
+  postgres:
+    container_name: postgres_container
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: '1234'
+    ports:
+      - "5433:5432"
+    restart: unless-stopped
