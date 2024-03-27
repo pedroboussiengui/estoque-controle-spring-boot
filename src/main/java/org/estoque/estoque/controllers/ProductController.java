@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,6 +43,11 @@ public class ProductController {
         response.put("totalItems", products.getTotalElements());
         response.put("totalPages", products.getTotalPages());
         return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}")
+    public Product update(@PathVariable Long id, @RequestBody @Valid ProductDTO productDTO) {
+        return service.update(id, productDTO);
     }
 
     @GetMapping("/{id}")

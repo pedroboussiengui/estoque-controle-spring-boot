@@ -1,5 +1,6 @@
 package org.estoque.estoque.services;
 
+import org.estoque.estoque.dto.ProductDTO;
 import org.estoque.estoque.exception.ProductNotFoundException;
 import org.estoque.estoque.models.Product;
 import org.estoque.estoque.repositories.ProductRepository;
@@ -41,4 +42,12 @@ public class ProductService {
         repository.delete(product);
     }
 
+    public Product update(Long id, ProductDTO productDTO) {
+        Product product = find(id);
+        product.setName(productDTO.getName());
+        product.setPrice(productDTO.getPrice());
+        product.setQuantity(productDTO.getQuantity());
+        product.setUpdatedAt(Timestamp.from(ZonedDateTime.now().toInstant()));
+        return repository.save(product);
+    }
 }
