@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: basic
+    active: jwt
   datasource:
     url: jdbc:postgresql://localhost:5433/estoque_db
     username: postgres
@@ -13,3 +13,9 @@ spring:
 server:
   servlet:
     context-path: /api/v1
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG

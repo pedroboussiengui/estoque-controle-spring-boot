@@ -23,7 +23,6 @@ public class AuthController {
         TokenResponseDTO tokenDTOOutput = TokenResponseDTO.builder()
                 .token(token)
                 .build();
-        System.out.println(tokenDTOOutput);
         return ResponseEntity.ok(tokenDTOOutput);
     }
 

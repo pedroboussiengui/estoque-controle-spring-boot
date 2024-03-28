@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -16,17 +17,18 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(securedEnabled = true)
 @Profile("basic")
 public class SecurityBasicConfig {
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests((authorize) -> authorize
-                .requestMatchers("/api/v1/token").permitAll()
-                .anyRequest().authenticated()
+        http.csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests((authorize) -> authorize
+            .requestMatchers("/token").permitAll()
+            .anyRequest().authenticated()
         )
-                .httpBasic(Customizer.withDefaults())
-                .csrf(AbstractHttpConfigurer::disable);
+            .httpBasic(Customizer.withDefaults());
         return http.build();
     }
 
