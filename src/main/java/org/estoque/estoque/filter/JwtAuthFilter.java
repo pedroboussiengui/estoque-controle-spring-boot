@@ -74,16 +74,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 }
             }
             filterChain.doFilter(request, response);
-        } catch (ExpiredJwtException e) {
+        } catch (Exception e) {
             logger.error("Exceçao lançada: " + e.getMessage());
             Map<String,String> error = new HashMap<>();
             error.put("error", e.getMessage());
             response.setStatus(403);
             response.setContentType("application/json");
             response.getWriter().write(new ObjectMapper().writeValueAsString(error));
-        } catch (SignatureException | MalformedJwtException e) {
-            logger.error(e.getMessage());
-            response.setStatus(403);
         }
     }
 }

@@ -25,6 +25,8 @@ public class User implements UserDetails {
 
     private String password;
 
+    private boolean enabled;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;

@@ -2,15 +2,17 @@ package org.estoque.estoque.services;
 
 import org.estoque.estoque.dto.LoginRequestDTO;
 import org.estoque.estoque.dto.UserRequestDTO;
+import org.estoque.estoque.exception.UserNotFoundException;
 import org.estoque.estoque.models.User;
 import org.estoque.estoque.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -26,10 +28,15 @@ public class UserService {
         this.mapper = mapper;
     }
 
-    public User add(UserRequestDTO userRequestDTO) {
-        User userEntity = this.mapper.map(userRequestDTO, User.class);
-        userEntity.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
-        return repository.save(userEntity);
+    public Optional<User> add(UserRequestDTO userRequestDTO) {
+        User user = repository.findByUsername(userRequestDTO.getUsername()).orElse(null);
+        if (user == null) {
+            User userEntity = this.mapper.map(userRequestDTO, User.class);
+            userEntity.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
+            userEntity.setEnabled(true);
+            return Optional.of(repository.save(userEntity));
+        }
+        return Optional.empty();
     }
 
     public Authentication authenticate(LoginRequestDTO loginRequestDTO) {
@@ -41,6 +48,12 @@ public class UserService {
 
     public User find(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found."));
+                .orElseThrow(() -> new UserNotFoundException("User not found."));
+    }
+
+    public void disable(Long id) {
+        User user = find(id);
+        user.setEnabled(false);
+        repository.save(user);
     }
 }
