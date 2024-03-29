@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.estoque.estoque.services.JwtService;
 
+import org.estoque.estoque.services.UserDetailsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.lang.NonNull;
@@ -33,13 +34,15 @@ import java.util.Map;
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
-    private final UserDetailsService userDetailsService;
+
+    // UserDetailsService separado para facilitar
+    private final UserDetailsServiceImpl userDetailsServiceImp;
 
     Logger logger = LoggerFactory.getLogger(JwtAuthFilter.class);
 
-    public JwtAuthFilter(JwtService jwtService, UserDetailsService userDetailsService) {
+    public JwtAuthFilter(JwtService jwtService, UserDetailsServiceImpl userDetailsServiceImp) {
         this.jwtService = jwtService;
-        this.userDetailsService = userDetailsService;
+        this.userDetailsServiceImp = userDetailsServiceImp;
     }
 
     @Override
@@ -61,8 +64,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             username = jwtService.extractUsername(tokenString);
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (username != null && authentication == null) {
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                System.out.println(userDetails);
+                UserDetails userDetails = userDetailsServiceImp.loadUserByUsername(username);
                 if (jwtService.isTokenValid(tokenString, userDetails)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,

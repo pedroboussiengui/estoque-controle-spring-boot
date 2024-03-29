@@ -43,7 +43,7 @@ public class SecurityJwtConfig {
             // authorized and unauthorized requests
             .authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers("/token").permitAll()
-                .requestMatchers("/users/**").permitAll()
+                .requestMatchers("/users").permitAll()
                 .anyRequest().authenticated()
             )
             // disable http basic

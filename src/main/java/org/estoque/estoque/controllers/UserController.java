@@ -7,6 +7,7 @@ import org.estoque.estoque.models.User;
 import org.estoque.estoque.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,9 +26,17 @@ public class UserController {
             .orElseThrow(() -> new UserAlreadyExistsException("User with given username already exists."));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> disable(@PathVariable Long id) {
-        service.disable(id);
+    @PutMapping("/disable/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> disableById(@PathVariable Long id) {
+        service.changeStatus(id, false);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT.value()).build();
+    }
+
+    @PutMapping("/enable/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> enableById(@PathVariable Long id) {
+        service.changeStatus(id, true);
         return ResponseEntity.status(HttpStatus.NO_CONTENT.value()).build();
     }
 

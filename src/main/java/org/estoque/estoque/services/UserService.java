@@ -51,9 +51,9 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User not found."));
     }
 
-    public void disable(Long id) {
+    public void changeStatus(Long id, boolean status) {
         User user = find(id);
-        user.setEnabled(false);
+        user.setEnabled(status);
         repository.save(user);
     }
 }
