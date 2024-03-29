@@ -4,6 +4,7 @@ import org.estoque.estoque.dto.LoginRequestDTO;
 import org.estoque.estoque.dto.UserRequestDTO;
 import org.estoque.estoque.exception.UserNotFoundException;
 import org.estoque.estoque.models.User;
+import org.estoque.estoque.models.types.Role;
 import org.estoque.estoque.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,7 +34,8 @@ public class UserService {
         if (user == null) {
             User userEntity = this.mapper.map(userRequestDTO, User.class);
             userEntity.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
-            userEntity.setEnabled(true);
+            userEntity.setEnabled(true); // enable by default
+            userEntity.setRole(Role.USER); // USER Role by default
             return Optional.of(repository.save(userEntity));
         }
         return Optional.empty();

@@ -2,6 +2,7 @@ package org.estoque.estoque.controllers;
 
 import jakarta.validation.Valid;
 import org.estoque.estoque.dto.UserRequestDTO;
+import org.estoque.estoque.dto.UserResponseDTO;
 import org.estoque.estoque.exception.UserAlreadyExistsException;
 import org.estoque.estoque.models.User;
 import org.estoque.estoque.services.UserService;
@@ -20,9 +21,16 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> register(@RequestBody @Valid UserRequestDTO userRequestDTO) {
+    public ResponseEntity<UserResponseDTO> register(@RequestBody @Valid UserRequestDTO userRequestDTO) {
         return service.add(userRequestDTO).map(
-            user -> ResponseEntity.status(HttpStatus.OK.value()).body(user))
+            user -> ResponseEntity.status(HttpStatus.OK.value()).body(
+                        UserResponseDTO.builder()
+                            .id(user.getId())
+                            .username(user.getUsername())
+                            .enabled(user.getEnabled())
+                            .Role(user.getRole().name())
+                            .build()
+            ))
             .orElseThrow(() -> new UserAlreadyExistsException("User with given username already exists."));
     }
 
