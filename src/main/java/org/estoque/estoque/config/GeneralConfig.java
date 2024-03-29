@@ -1,6 +1,7 @@
 package org.estoque.estoque.config;
 
 import org.estoque.estoque.repositories.UserRepository;
+import org.estoque.estoque.services.UserDetailsServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,10 +17,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class GeneralConfig {
 
-    private final UserRepository repository;
+    private final UserDetailsServiceImpl userDetailsService;
 
-    public GeneralConfig(UserRepository repository) {
-        this.repository = repository;
+    public GeneralConfig(UserDetailsServiceImpl userDetailsService) {
+        this.userDetailsService = userDetailsService;
     }
 
     @Bean
@@ -36,24 +37,26 @@ public class GeneralConfig {
     }
 
     /**
-     * UserDetailsService define como recuperar um usuario utilizando o repository
+     * UserDetailsService define como recuperar um usuario utilizando o repository,
+     * como estou usando o UserDetailsServiceImp, posso apagar esse bean
      */
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return username -> repository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-    }
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//        return username -> repository.findByUsername(username)
+//                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+//    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
+    // defines a new way to authenticate, disable the default generated password for htto basic authentication
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
-        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
 
         return authProvider;

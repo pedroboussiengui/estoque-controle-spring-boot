@@ -77,7 +77,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
             filterChain.doFilter(request, response);
         } catch (Exception e) {
-            logger.error("Exceçao lançada: " + e.getMessage());
+            logger.error(e.getClass().getName() + ": " + e.getMessage());
             Map<String,String> error = new HashMap<>();
             error.put("error", e.getMessage());
             response.setStatus(403);
