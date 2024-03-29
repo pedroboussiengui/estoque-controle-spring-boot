@@ -3,6 +3,7 @@ package org.estoque.estoque.services;
 import org.estoque.estoque.dto.LoginRequestDTO;
 import org.estoque.estoque.dto.UserRequestDTO;
 import org.estoque.estoque.dto.UserResponseDTO;
+import org.estoque.estoque.exception.MessagesException;
 import org.estoque.estoque.exception.UserNotFoundException;
 import org.estoque.estoque.models.User;
 import org.estoque.estoque.models.types.Role;
@@ -53,12 +54,12 @@ public class UserService {
     public UserResponseDTO find(Long id) {
         return repository.findById(id)
                 .map(user -> this.mapper.map(user, UserResponseDTO.class))
-                .orElseThrow(() -> new UserNotFoundException("User not found."));
+                .orElseThrow(() -> new UserNotFoundException(MessagesException.USER_NOT_FOUND));
     }
 
     public void changeStatus(Long id, boolean status) {
         User user = repository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User not found."));
+                .orElseThrow(() -> new UserNotFoundException(MessagesException.USER_NOT_FOUND));
         user.setEnabled(status);
         repository.save(user);
     }
@@ -70,7 +71,7 @@ public class UserService {
 
     public void remove(Long id) {
         User user = repository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User not found."));
+                .orElseThrow(() -> new UserNotFoundException(MessagesException.USER_NOT_FOUND));
         repository.delete(user);
     }
 }

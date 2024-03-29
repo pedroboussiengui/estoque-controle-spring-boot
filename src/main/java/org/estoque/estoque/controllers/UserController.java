@@ -3,6 +3,7 @@ package org.estoque.estoque.controllers;
 import jakarta.validation.Valid;
 import org.estoque.estoque.dto.UserRequestDTO;
 import org.estoque.estoque.dto.UserResponseDTO;
+import org.estoque.estoque.exception.MessagesException;
 import org.estoque.estoque.exception.UserAlreadyExistsException;
 import org.estoque.estoque.services.UserService;
 import org.springframework.http.HttpStatus;
@@ -32,7 +33,7 @@ public class UserController {
                             .Role(user.getRole().name())
                             .build()
             ))
-            .orElseThrow(() -> new UserAlreadyExistsException("User with given username already exists."));
+            .orElseThrow(() -> new UserAlreadyExistsException(MessagesException.USER_ALREADY_EXISTS));
     }
 
     @GetMapping

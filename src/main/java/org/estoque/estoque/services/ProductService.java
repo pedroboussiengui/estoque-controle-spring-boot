@@ -1,6 +1,7 @@
 package org.estoque.estoque.services;
 
 import org.estoque.estoque.dto.ProductRequestDTO;
+import org.estoque.estoque.exception.MessagesException;
 import org.estoque.estoque.exception.ProductNotFoundException;
 import org.estoque.estoque.models.Product;
 import org.estoque.estoque.repositories.ProductRepository;
@@ -33,7 +34,7 @@ public class ProductService {
 
     public Product find(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(String.format("No product with %d was found.", id)));
+                .orElseThrow(() -> new ProductNotFoundException(MessagesException.PRODUCT_NOT_FOUND));
     }
 
     public void remove(Long id) {
