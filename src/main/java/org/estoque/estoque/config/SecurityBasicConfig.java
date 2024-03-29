@@ -46,9 +46,4 @@ public class SecurityBasicConfig {
 
         return new InMemoryUserDetailsManager(user, adm);
     }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 }

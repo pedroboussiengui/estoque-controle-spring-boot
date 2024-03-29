@@ -6,6 +6,8 @@ services:
     image: postgres
     environment:
       POSTGRES_PASSWORD: '1234'
+    command:
+      - createdb -U postgres estoque_dbe
     ports:
       - "5433:5432"
     restart: unless-stopped
