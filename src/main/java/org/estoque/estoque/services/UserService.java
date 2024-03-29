@@ -2,6 +2,7 @@ package org.estoque.estoque.services;
 
 import org.estoque.estoque.dto.LoginRequestDTO;
 import org.estoque.estoque.dto.UserRequestDTO;
+import org.estoque.estoque.dto.UserResponseDTO;
 import org.estoque.estoque.exception.UserNotFoundException;
 import org.estoque.estoque.models.User;
 import org.estoque.estoque.models.types.Role;
@@ -13,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -48,14 +50,27 @@ public class UserService {
         ));
     }
 
-    public User find(Long id) {
+    public UserResponseDTO find(Long id) {
         return repository.findById(id)
+                .map(user -> this.mapper.map(user, UserResponseDTO.class))
                 .orElseThrow(() -> new UserNotFoundException("User not found."));
     }
 
     public void changeStatus(Long id, boolean status) {
-        User user = find(id);
+        User user = repository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found."));
         user.setEnabled(status);
         repository.save(user);
+    }
+
+    public List<UserResponseDTO> list() {
+        return repository.findAll().stream()
+                .map(user -> this.mapper.map(user, UserResponseDTO.class)).toList();
+    }
+
+    public void remove(Long id) {
+        User user = repository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found."));
+        repository.delete(user);
     }
 }

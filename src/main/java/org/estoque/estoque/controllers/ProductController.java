@@ -35,7 +35,8 @@ public class ProductController {
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, Object>> list(@RequestParam(defaultValue = "0") int page,
-                                                    @RequestParam(defaultValue = "10") int size) {
+                                                    @RequestParam(defaultValue = "10") int size)
+    {
         Page<Product> products = service.list(page, size);
         Map<String, Object> response = new HashMap<>();
         response.put("content", products.getContent());
