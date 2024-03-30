@@ -10,6 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.security.InvalidParameterException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +49,13 @@ public class ControllerAdvisor {
         List<String> errors = Collections.singletonList(ex.getMessage());
         logger.error("User not found.");
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(InvalidParameterException.class)
+    public ResponseEntity<Map<String, List<String>>> handleInvalidParameterException(InvalidParameterException ex) {
+        List<String> errors = Collections.singletonList(ex.getMessage());
+        logger.error("Invalid parameters was passed.");
+        return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
     private Map<String, List<String>> getErrorsMap(List<String> errors) {

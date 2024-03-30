@@ -35,9 +35,10 @@ public class ProductController {
     @GetMapping
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Map<String, Object>> list(@RequestParam(defaultValue = "0") int page,
-                                                    @RequestParam(defaultValue = "10") int size)
+                                                    @RequestParam(defaultValue = "10") int size,
+                                                    @RequestParam String sort)
     {
-        Page<Product> products = service.list(page, size);
+        Page<Product> products = service.list(page, size, sort);
         Map<String, Object> response = new HashMap<>();
         response.put("content", products.getContent());
         response.put("currentPage", products.getNumber());

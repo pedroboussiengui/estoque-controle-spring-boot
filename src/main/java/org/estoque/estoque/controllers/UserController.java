@@ -30,7 +30,6 @@ public class UserController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponseDTO> register(@RequestBody @Valid UserRequestDTO userRequestDTO) {
         return service.add(userRequestDTO).map(
             user -> ResponseEntity.status(HttpStatus.OK.value()).body(
@@ -47,9 +46,10 @@ public class UserController {
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, Object>> list(@RequestParam(defaultValue = "0") int page,
-                                      @RequestParam(defaultValue = "10") int size)
+                                                    @RequestParam(defaultValue = "10") int size,
+                                                    @RequestParam(defaultValue = "id ASC") String sort)
     {
-        Page<User> users = service.list(page, size);
+        Page<User> users = service.list(page, size, sort);
         Map<String, Object> response = new HashMap<>();
         response.put("content", users.getContent()
                 .stream().map(user -> this.mapper.map(user, UserResponseDTO.class)).toList());

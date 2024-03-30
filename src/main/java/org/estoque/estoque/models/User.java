@@ -3,6 +3,7 @@ package org.estoque.estoque.models;
 import jakarta.persistence.*;
 import lombok.*;
 import org.estoque.estoque.models.types.Role;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,13 +24,18 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    // username and password cant be null
+    @Column(unique = true, nullable = false)
     private String username;
 
+    @Column(nullable = false)
     private String password;
 
+    // dafult value is true
+    @Column(columnDefinition = "boolean default true")
     private Boolean enabled;
 
+    // o banco de dados so aceita os valores do enum
     @Enumerated(EnumType.STRING)
     private Role role;
 

@@ -4,6 +4,7 @@ import org.estoque.estoque.filter.JwtAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -38,7 +39,7 @@ public class SecurityJwtConfig {
             // authorized and unauthorized requests
             .authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers("/token").permitAll()
-                .requestMatchers("/users").permitAll()
+                .requestMatchers(HttpMethod.POST, "/users").permitAll()
                 .anyRequest().authenticated()
             )
             // disable http basic
