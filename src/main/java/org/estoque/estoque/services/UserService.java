@@ -9,6 +9,9 @@ import org.estoque.estoque.models.User;
 import org.estoque.estoque.models.types.Role;
 import org.estoque.estoque.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -64,9 +67,9 @@ public class UserService {
         repository.save(user);
     }
 
-    public List<UserResponseDTO> list() {
-        return repository.findAll().stream()
-                .map(user -> this.mapper.map(user, UserResponseDTO.class)).toList();
+    public Page<User> list(int page, int size) {
+        Pageable paging = PageRequest.of(page, size);
+        return repository.findAll(paging);
     }
 
     public void remove(Long id) {

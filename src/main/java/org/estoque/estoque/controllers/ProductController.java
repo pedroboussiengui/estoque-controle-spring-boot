@@ -33,7 +33,7 @@ public class ProductController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Map<String, Object>> list(@RequestParam(defaultValue = "0") int page,
                                                     @RequestParam(defaultValue = "10") int size)
     {
@@ -46,19 +46,21 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/{id}")
-    public Product update(@PathVariable Long id, @RequestBody @Valid ProductRequestDTO productDTO) {
-        return service.update(id, productDTO);
-    }
-
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('USER')")
     public Product findById(@PathVariable Long id) {
         return service.find(id);
     }
 
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public Product update(@PathVariable Long id, @RequestBody @Valid ProductRequestDTO productDTO) {
+        return service.update(id, productDTO);
+    }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ADMIN')")
     public void remove(@PathVariable Long id) {
         service.remove(id);
     }

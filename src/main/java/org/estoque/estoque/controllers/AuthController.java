@@ -4,6 +4,7 @@ import org.estoque.estoque.dto.LoginRequestDTO;
 import org.estoque.estoque.dto.TokenResponseDTO;
 import org.estoque.estoque.services.JwtService;
 import org.estoque.estoque.services.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,8 +31,8 @@ public class AuthController {
             TokenResponseDTO tokenDTOOutput = TokenResponseDTO.builder()
                     .token(token)
                     .build();
-            return ResponseEntity.ok(tokenDTOOutput);
+            return ResponseEntity.status(HttpStatus.OK.value()).body(tokenDTOOutput);
         }
-        return null;
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value()).build();
     }
 }
